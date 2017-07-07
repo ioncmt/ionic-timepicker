@@ -19,7 +19,10 @@ angular.module('ionic-timepicker.provider', [])
       var provider = {};
       var $scope = $rootScope.$new();
       $scope.today = resetHMSM(new Date()).getTime();
-      $scope.time = {};
+      $scope.time = {
+        hours : 0,
+        minutes : 0
+      };
 
       //Reset the hours, minutes, seconds and milli seconds
       function resetHMSM(currentDate) {
@@ -30,6 +33,40 @@ angular.module('ionic-timepicker.provider', [])
         return currentDate;
       }
 
+      //Updating hours through keyboard event
+      $scope.updateInputHours = function(keyCode){
+        var currentValue = Number($scope.time.hours);
+        //If not a number, set 0
+        if (isNaN(currentValue)){
+          $scope.time.hours = "0";
+        }
+        if (currentValue < 0){
+          $scope.time.hours = "0";
+        }
+        //If format mode 12
+        if ($scope.mainObj.format == 12 && currentValue > 12){
+          $scope.time.hours = "12";
+        }
+        //If format mode 24
+        if ($scope.mainObj.format == 24 && currentValue > 23){
+          $scope.time.hours = "23";
+        }
+      };
+
+      //Updating minutes through keyboard event
+      $scope.updateInputMinutes = function(keyCode){
+        var currentValue = Number($scope.time.minutes);
+        //If not a number, set 0
+        if (isNaN(currentValue)){
+          $scope.time.minutes = "0";
+        }
+        if (currentValue < 0){
+          $scope.time.minutes = "0";
+        }
+        if (currentValue > 59){
+          $scope.time.minutes = "59";
+        }
+      };
 
       //Increasing the hours
       $scope.increaseHours = function () {
