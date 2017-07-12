@@ -8,7 +8,8 @@ angular.module('ionic-timepicker.provider', [])
       closeLabel: 'Close',
       inputTime: (((new Date()).getHours() * 60 * 60) + ((new Date()).getMinutes() * 60)),
       format: 12,
-      step: 15
+      step: 15,
+      closeOnViewChange: true
     };
 
     this.configTimePicker = function (inputObj) {
@@ -184,6 +185,12 @@ angular.module('ionic-timepicker.provider', [])
           text: $scope.mainObj.closeLabel,
           type: 'button_close'
         });
+
+        if($scope.mainObj.closeOnViewChange) {
+          $rootScope.$on('$ionicView.beforeLeave', function() {
+            $scope.popup.close();
+          });
+        }
 
         $scope.popup = $ionicPopup.show({
           templateUrl: 'ionic-timepicker.html',
